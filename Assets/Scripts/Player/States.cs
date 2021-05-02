@@ -4,12 +4,12 @@ namespace Player
 {
     class Idle : PlayerState
     {
-        public Idle(StateManager stateManager) : base(stateManager, "Idle") {}
+        public Idle(Controller controller) : base(controller, "Idle") {}
 
         public override void DoStateBehaviour()
         {
             //stateManager.animator.Play(stateName);
-            stateManager.spriteRenderer.color = new UnityEngine.Color(255, 255, 255);
+            controller.spriteRenderer.color = new UnityEngine.Color(255, 255, 255);
         }
 
         public override void Transitions()
@@ -21,12 +21,17 @@ namespace Player
 
     class Move : PlayerState
     {
-        public Move(StateManager stateManager) : base(stateManager, "Move") {}
+        private Vector2 prevPos;
+
+        public Move(Controller controller) : base(controller, "Move") {}
 
         public override void DoStateBehaviour()
         {
             //stateManager.animator.Play(stateName);
-            stateManager.spriteRenderer.color = new UnityEngine.Color(127, 0, 0);
+            controller.rigidbody2d.MovePosition(controller.rigidbody2d.position + new Vector2(controller.playerInput.Horizontal, controller.playerInput.Vertical).normalized * controller.speed * Time.fixedDeltaTime);
+            controller.direction = (controller.rigidbody2d.position - prevPos).normalized;
+            prevPos = controller.rigidbody2d.position;
+            controller.spriteRenderer.color = new UnityEngine.Color(127, 0, 0);
         }
 
         public override void Transitions()
@@ -38,7 +43,7 @@ namespace Player
 
     class Dodge : PlayerState
     {
-        public Dodge(StateManager stateManager) : base(stateManager, "Dodge") {}
+        public Dodge(Controller controller) : base(controller, "Dodge") {}
 
         public override void DoStateBehaviour()
         {

@@ -2,38 +2,51 @@ using UnityEngine;
 
 namespace Player
 {
-    [RequireComponent(typeof(Rigidbody2D))]
     public class Controller : MonoBehaviour
     {
-        [SerializeField]
-        private float speed = 5f;
-        
         public readonly PlayerInput playerInput = new PlayerInput();
         public Rigidbody2D rigidbody2d;
-        public StateManager stateManager;
-        public Vector2 direction { get; private set; }
+        public Animator animator;
+        public SpriteRenderer spriteRenderer;
+        public PlayerState playerState;
 
-        private Vector2 prevPos;
+        public float speed;
+        public bool canMove;
+        [HideInInspector]
+        public Vector2 direction;
+
+        private Controller()
+        {
+            speed = 5f;
+            canMove = true;
+            direction = new Vector2();
+        }
 
         void Awake()
         {
             rigidbody2d = GetComponent<Rigidbody2D>();
-            stateManager = GetComponent<StateManager>();
+            animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        void Start()
+        {
+            SetState(new Idle(this));
+        }
+
+        public void SetState(PlayerState state)
+        {
+            if (playerState != null)
+                playerState.ExitState();
+
+            playerState = state;
+            playerState.EnterState();
         }
 
         void Update()
         {
-            if (stateManager.canMove)
-            {
-                rigidbody2d.MovePosition(rigidbody2d.position + new Vector2(playerInput.Horizontal, playerInput.Vertical).normalized * speed * Time.fixedDeltaTime);
-                direction = (rigidbody2d.position - prevPos).normalized;
-                prevPos = rigidbody2d.position;
-            }
-            
-            if (playerInput.Dodge)
-            {
-                stateManager.playerState.Dodge();
-            }
+            playerState.DoStateBehaviour();
+            playerState.Transitions();
         }
     }
 }
