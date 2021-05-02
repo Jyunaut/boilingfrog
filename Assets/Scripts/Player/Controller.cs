@@ -11,7 +11,7 @@ namespace Player
         public PlayerState playerState;
 
         public float speed;
-        public bool canMove;
+        public bool canMove { get; private set; }
         [HideInInspector]
         public Vector2 direction;
 
@@ -41,6 +41,14 @@ namespace Player
 
             playerState = state;
             playerState.EnterState();
+        }
+
+        public void EnableMovement() => canMove = true;
+        public void DisableMovement() => canMove = false;
+
+        void FixedUpdate()
+        {
+            playerState.DoStateBehaviourFixedUpdate();
         }
 
         void Update()

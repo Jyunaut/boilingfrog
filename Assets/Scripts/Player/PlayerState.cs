@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Player
 {
     public abstract class PlayerState : State
@@ -14,9 +16,8 @@ namespace Player
 
         public bool Idle()
         {
-            if ((controller.playerInput.Horizontal == 0
-                && controller.playerInput.Vertical == 0)
-                && controller.direction.magnitude == 0)
+            if (Mathf.Abs(controller.playerInput.Horizontal) <= Mathf.Epsilon
+                && Mathf.Abs(controller.playerInput.Vertical) <= Mathf.Epsilon)
             {
                 controller.SetState(new Idle(controller)); return true;
             }
