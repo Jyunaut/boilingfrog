@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public float speed = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        speed = Random.Range(2f,5f);
     }
 
     // Update is called once per frame
@@ -24,6 +25,6 @@ public class Projectile : MonoBehaviour
 
     void trajectory(Vector3 dir)
     {
-        transform.position = transform.position + new Vector3(1*Time.deltaTime, 0, 0);
+        transform.position = transform.position + new Vector3(speed*Time.deltaTime, 0, 0);
     }
 }

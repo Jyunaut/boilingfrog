@@ -20,13 +20,12 @@ public class Throw : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        while(timer >= curOffset)
+        if(timer >= curOffset)
         {
-            
             threw(new Vector3(0, Random.Range(3f,11f), Random.Range(-12f,-2f)), Vector3.zero);
             curOffset += offset;
         }
-
+        Debug.Log("hi");
     }
 
     void threw(Vector3 pos, Vector3 dir)
