@@ -2,25 +2,20 @@ using UnityEngine;
 
 namespace Player
 {
+    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Controller : MonoBehaviour
     {
         public readonly PlayerInput playerInput = new PlayerInput();
-        public Rigidbody2D rigidbody2d;
-        public Animator animator;
-        public SpriteRenderer spriteRenderer;
         public PlayerState playerState;
+        [HideInInspector] public Rigidbody2D rigidbody2d;
+        [HideInInspector] public Animator animator;
+        [HideInInspector] public SpriteRenderer spriteRenderer;
+        [HideInInspector] public Vector2 direction = new Vector2(0, 0);
 
-        public float speed;
-        public bool canMove { get; private set; }
-        [HideInInspector]
-        public Vector2 direction;
-
-        private Controller()
-        {
-            speed = 5f;
-            canMove = true;
-            direction = new Vector2();
-        }
+        public float speed = 5f;
+        public bool canMove { get; private set; } = true;
 
         void Awake()
         {

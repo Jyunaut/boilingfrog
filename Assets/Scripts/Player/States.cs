@@ -45,9 +45,9 @@ namespace Player
         }
     }
 
-    class Dodge : PlayerState
+    public class Dodge : PlayerState
     {
-        private float dodgeSpeed = 0.5f;
+        private float dodgeSpeed = 2f;
         private float dodgeTimer;
 
         public Dodge(Controller controller) : base(controller, "Dodge") {}
@@ -56,20 +56,16 @@ namespace Player
         {
             controller.DisableMovement();
 
-            dodgeTimer = 0.5f;
+            dodgeTimer = 0.2f;
         }
 
         public override void DoStateBehaviourFixedUpdate()
         {
             controller.spriteRenderer.color = new UnityEngine.Color(0, 127, 0);
             controller.rigidbody2d.MovePosition(controller.rigidbody2d.position + controller.direction * dodgeSpeed * dodgeTimer);
-            dodgeTimer -= Time.fixedDeltaTime;
-            if (dodgeTimer <= 0) ExitState();
-        }
 
-        public override void ExitState()
-        {
-            controller.EnableMovement();
+            dodgeTimer -= Time.fixedDeltaTime;
+            if (dodgeTimer <= 0) controller.EnableMovement();
         }
 
         public override void Transitions()
